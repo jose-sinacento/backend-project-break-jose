@@ -5,18 +5,20 @@ const ProductController = require('../controllers/productController');
 
 
 //Traer todos los productos .find() se trae todos
-router.get('/products', ProductController.getAll);
+router.get('/products', ProductController.showProducts);
 
 //Traer solo un producto por su ID
-router.get('/products/:_id', ProductController.getOneProduct );
+router.get('/products/:_id', ProductController.showProductById);
 
 //Crear nuevos productos
-router.post('/products', ProductController.createNewProduct);
+router.post('/products', ProductController.createProduct);
 
 //Actualizar un producto
-router.put('/dashboard/:_id', ProductController.updateOneProduct);
+router.put('/dashboard/:_id', ProductController.showEditProduct);
 
 //Eliminar un producto
-router.delete('/dashboard/:_id/delete', ProductController.deleteOneProduct)
+router.delete('/dashboard/:_id/delete', ProductController.deleteProduct)
+
+//TODO endpoints dashboard 
 
 module.exports = router;
