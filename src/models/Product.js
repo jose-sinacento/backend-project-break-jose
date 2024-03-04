@@ -4,8 +4,8 @@ const ProductSchema = new mongoose.Schema({
     name: String, 
     description: String,
     image: String,
-    category: String, 
-    size: String, 
+    category: { type: String, enum: ['Camisetas', 'Pantalones', 'Zapatos', 'Accesorios'] },
+    size: { type: String, enum: ['XS', 'S', 'M', 'L', 'XL'] },
     price: String
 }, {timestamps: true})
 

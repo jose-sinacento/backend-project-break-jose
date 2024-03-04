@@ -4,6 +4,8 @@ const Product = require('../models/Product');
 const ProductController = require('../controllers/productController');
 
 
+router.get('/', ProductController.htmlBasicc);
+
 //Traer todos los productos .find() se trae todos
 router.get('/products', ProductController.showProducts);
 
