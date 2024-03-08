@@ -42,11 +42,11 @@ const showProducts = async (req, res) => {
 };
 
 //función para generar el html de todos los productos
-function getProductCards(products) {
+function getProductCards(products, isDashboard) {
     let html = '<div class="list-products">';
 
     for (let product of products) {
-        html += getProductCard(product, '');
+        html += getProductCard(product, '', false, isDashboard);
     }
 
     html += '</div>';
@@ -55,19 +55,19 @@ function getProductCards(products) {
 }
 
 //Función para mostrar solo un producto
-function getProductCard(product, className) {
+function getProductCard(product, className, isDetailPage, isDashboard) {
     if (className) {
         return `
             <div class="${className}">
-                ${getSingleProductHTML(product)}
+                ${getSingleProductHTML(product, isDetailPage, isDashboard)}
             </div>
         `;
     } else {
-        return getSingleProductHTML(product);
+        return getSingleProductHTML(product, isDetailPage, isDashboard);
     }
 };
 
-const getSingleProductHTML = (product) => {
+const getSingleProductHTML = (product, isDetailPage, isDashboard) => {
     return `
         <div class="product-card">
             <img src="${product.image}" alt="${product.name}">
@@ -79,33 +79,19 @@ const getSingleProductHTML = (product) => {
                 <p>${product.category}</p>
                 <p>${product.size}</p>
 
-                <div class="see-product">
-                    <a href="/products/${product._id}">Ver detalle</a>
-                </div>
+                ${isDetailPage ? '' : getProductDetailLink(product, isDashboard)}
             </div>
         </div>
     `;
 }
 
-//Función para filtrar las categorías
-/*const showProductsByCategoryMiddleware = (category) => {
-    return async (req, res) => {
-        try {
-            // la clave de la consulta aquí debe corresponder exactamente al campo definido en el esquema del producto (modelo)
-            const products = await Product.find({ category: category }); 
-            // la clave "category" debe ser la misma que en el esquema (modelo)
-            if (products.length === 0) {
-                res.send('No se encontraron productos en esta categoría');
-                return;
-            }
-
-            res.send(baseHtml + getNavBar() + getProductCards(products) + htmlEnd);
-         
-        } catch (error) {
-            res.status(500).send('Error del servidor: ' + error.message);
-        }
-    };
-};*/
+const getProductDetailLink = (product, isDashboard) => {
+    return `
+        <div class="see-product">
+            ${isDashboard ? '<a href="/dashboard/' + product._id + '">Ver detalle</a>' : '<a href="/products/' + product._id + '">Ver detalle</a>'}
+        </div>
+    `;
+}
 
 //Aquí empiezan los endpoints 
 const ProductController = {
@@ -132,7 +118,7 @@ const ProductController = {
     async showProductById(req, res) {
         try {
             const product = await Product.findById(req.params._id)
-            res.send(baseHtml + getNavBar() + getProductCard(product, 'detail-product') + htmlEnd)
+            res.send(baseHtml + getNavBar() + getProductCard(product, 'detail-product', true) + htmlEnd)
         } catch (error) {
             console.log(error)
             res.status(500).send('search error by product ID')
@@ -220,42 +206,33 @@ const ProductController = {
         }
     },
 
-    async showCamisetas(req, res) {
+    async showProductsByCategory(req, res) {
+        let category = req.params.category;
+        //Aqui primero pongo en mayúsuclas el char 0 y después concateno lo restante (C-amisetas)
+        category = category.charAt(0).toUpperCase() + category.slice(1);
         try {
-            res.send(showProductsByCategoryMiddleware('Camisetas'))
-        } catch {
-            console.log(error)
+            let products;
+            products = await Product.find({ category: category });
+            res.send(baseHtml + getNavBar() + getProductCards(products) + htmlEnd);
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({
+                message: "Error when filtering products",
+                error
+            });
         }
     },
 
-    async showProductsByCategory(req, res) {
-        const path = req.path;
-        const category = req.query.category;
+    async showProductsDashboard(req, res) {
         try {
-            let products;
-            if(category){
-                products = await Product.find({ category: category });
-            }else{
-                products = await Product.find();
-            }
-            res.send(getNavBar(path, category) + getProducts(path, products)); 
+            const products = await Product.find()
+            res.send(baseHtml + getNavBar() + getProductCards(products, true) + htmlEnd);
         } catch (error) {
-            res.status(500).send({ message: "Error when filtering products"});
+            console.log(error)
+            res.status(500).send({
+                message: "Error when showing product in dashboard"
+            });
         }
-
-    /* PENDING TODO 
-    async showProductCategory(req, res) {
-        try {
-            const category = req.params.category
-            const productCategory = await Product.find({category: category == 'Camisetas'|| 'Pantalones' || 'Zapatos'|| 'Accesorios'});
-            res.send(baseHtml + getNavBar() + getProductCards(productCategory) + htmlEnd);
-        
-
-        } catch (error) {
-            console.error(error)
-        }
-
-    },*/
     }
 };
 

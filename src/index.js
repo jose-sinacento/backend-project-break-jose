@@ -3,11 +3,24 @@ const app = express();
 const PORT = 3000;
 const dbConnection = require('./config/db');
 const productRoutes = require('./routes/productRoutes')
+const authRoutes = require('./routes/productRoutes');
+const hashedSecret = require('./config/crypto');
+const session = require('express-session');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
+
+app.use(
+    session({
+        secret: hashedSecret,
+        resave: false,
+        saveUninitialized: true,
+        cookie: {secure: false}
+    })
+)
 app.use('/', productRoutes)
+app.use('/', authRoutes)
 
 dbConnection()
 
