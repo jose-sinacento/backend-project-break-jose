@@ -21,6 +21,9 @@ router.put('/dashboard/:_id', ProductController.showEditProduct);
 //Eliminar un producto
 router.delete('/dashboard/:_id/delete', ProductController.deleteProduct)
 
-//TODO endpoints dashboard 
+//Rutas para los enlaces del navegador 
+router.get('/product/category/', ProductController.showProductsByCategory)
 
+//TODO endpoints dashboard/administración
+router.get('/dashboard/new', ProductController.showNewProduct);
 module.exports = router;

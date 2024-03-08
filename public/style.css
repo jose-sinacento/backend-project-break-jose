@@ -83,10 +83,17 @@ a {
 	font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.products-box {
+.products-box .list-products {
 	display: flex;
 	gap: 20px;
 	padding: 20px;
+}
+
+.products-box .detail-product {
+	display: flex;
+	gap: 20px;
+	padding: 20px;
+	justify-content: center;
 }
 
 .text-div {
