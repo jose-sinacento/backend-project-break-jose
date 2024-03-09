@@ -9,14 +9,12 @@ const session = require('express-session');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-
-
 app.use(
     session({
         secret: hashedSecret,
         resave: false,
         saveUninitialized: true,
-        cookie: {secure: false}
+        cookie: { secure: false }
     })
 )
 app.use('/', productRoutes)
@@ -27,6 +25,6 @@ dbConnection()
 //Para poder añadir estilos, imágenes, etc. necesitaremos el middleware express.static para servir archivos estáticos.
 app.use(express.static('public'));
 
-app.listen(PORT, ()=> {
+app.listen(PORT, () => {
     console.log(`Express está escuchando en el puerto http://localhost:${PORT}`)
 })
