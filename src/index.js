@@ -22,6 +22,7 @@ app.use('/', productRoutes)
 app.use('/', authRoutes)
 app.use('/', apiRoutes)
 
+
 dbConnection()
 
 //Para poder añadir estilos, imágenes, etc. necesitaremos el middleware express.static para servir archivos estáticos.

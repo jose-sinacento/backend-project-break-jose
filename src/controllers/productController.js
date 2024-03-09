@@ -21,7 +21,7 @@ const getNavBar = () => {
             <a href="/products/category/pantalones">Pantalones</a>
             <a href="/products/category/zapatos">Zapatos</a>
             <a href="/products/category/accesorios">Accesorios</a>
-            <a href="">Login</a>
+            <a href="/login">Login</a>
         </nav>
         
         <div class="products-box">
@@ -292,7 +292,6 @@ const ProductController = {
     },
 
     async editProduct(req, res) {
-        console.log('he entrado en la edicion');
         try {
             const productID = req.params._id;
             const product = await Product.findByIdAndUpdate(
