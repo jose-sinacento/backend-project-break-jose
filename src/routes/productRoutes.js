@@ -19,10 +19,6 @@ router.get('/products/:_id', ProductController.showProductById);
 router.get('/products/category/:category', ProductController.showProductsByCategory);
 
 
-
-
-
-
 // ******* PARTE PRIVADA ********
 // - GET /dashboard: Devuelve el dashboard del administrador. En el dashboard aparecerán todos los artículos que se hayan subido. Si clickamos en uno de ellos nos llevará a su página para poder actualizarlo o eliminarlo.
 router.get('/dashboard/', ProductController.showProductsDashboard);

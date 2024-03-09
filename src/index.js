@@ -4,6 +4,7 @@ const PORT = 3000;
 const dbConnection = require('./config/db');
 const productRoutes = require('./routes/productRoutes')
 const authRoutes = require('./routes/productRoutes');
+const apiRoutes = require('./routes/apiRoutes');
 const hashedSecret = require('./config/crypto');
 const session = require('express-session');
 
@@ -19,6 +20,7 @@ app.use(
 )
 app.use('/', productRoutes)
 app.use('/', authRoutes)
+app.use('/', apiRoutes)
 
 dbConnection()
 
